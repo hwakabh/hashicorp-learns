@@ -16,17 +16,15 @@ provider "google" {
 }
 
 // Setup for Dynamic Credentials
-provider "tfe" {
-  hostname = var.tfc_hostname
-}
+# provider "tfe" {
+#   hostname = var.tfc_hostname
+# }
 
-data "tfe_project" "tfc_project" {
-  // For fetching data from TFE/TFC, need to generate Token and set as envar
-  name         = var.tfc_project_name
-  organization = var.tfc_organization_name
-}
-
-// --- Resource for TFC
+# data "tfe_project" "tfc_project" {
+#   // For fetching data from TFE/TFC, need to generate Token and set as envar
+#   name         = var.tfc_project_name
+#   organization = var.tfc_organization_name
+# }
 
 // Fetch latest image of GKE node image
 // https://registry.terraform.io/providers/hashicorp/google/latest/docs/data-sources/container_engine_versions
@@ -35,35 +33,36 @@ data "google_container_engine_versions" "gke_version" {
   version_prefix = "1.30."
 }
 
-resource "tfe_workspace" "hwakabh-tfworkspace" {
-  name         = var.tfc_workspace_name
-  organization = var.tfc_organization_name
-  project_id   = data.tfe_project.tfc_project.id
-}
+# // --- Resource for TFC
+# resource "tfe_workspace" "hwakabh-tfworkspace" {
+#   name         = var.tfc_workspace_name
+#   organization = var.tfc_organization_name
+#   project_id   = data.tfe_project.tfc_project.id
+# }
 
-resource "tfe_variable" "enable_gcp_provider_auth" {
-  workspace_id  = tfe_workspace.hwakabh-tfworkspace.id
-  key           = "TFC_GCP_PROVIDER_AUTH"
-  value         = "true"
-  category      = "env"
-  description   = "Enable the Workload Identity integration for GCP."
-}
+# resource "tfe_variable" "enable_gcp_provider_auth" {
+#   workspace_id  = tfe_workspace.hwakabh-tfworkspace.id
+#   key           = "TFC_GCP_PROVIDER_AUTH"
+#   value         = "true"
+#   category      = "env"
+#   description   = "Enable the Workload Identity integration for GCP."
+# }
 
-resource "tfe_variable" "tfc_gcp_workload_provider_name" {
-  workspace_id  = tfe_workspace.hwakabh-tfworkspace.id
-  key           = "TFC_GCP_WORKLOAD_PROVIDER_NAME"
-  value         = "tfc-oidc-provider"
-  category      = "env"
-  description   = "The workload provider name to authenticate against."
-}
+# resource "tfe_variable" "tfc_gcp_workload_provider_name" {
+#   workspace_id  = tfe_workspace.hwakabh-tfworkspace.id
+#   key           = "TFC_GCP_WORKLOAD_PROVIDER_NAME"
+#   value         = "tfc-oidc-provider"
+#   category      = "env"
+#   description   = "The workload provider name to authenticate against."
+# }
 
-resource "tfe_variable" "tfc_gcp_service_account_email" {
-  workspace_id  = tfe_workspace.hwakabh-tfworkspace.id
-  key           = "TFC_GCP_RUN_SERVICE_ACCOUNT_EMAIL"
-  value         = "terraform@hc-8732d2178369440c886cb59aee6.iam.gserviceaccount.com"
-  category      = "env"
-  description   = "The GCP service account email runs will use to authenticate."
-}
+# resource "tfe_variable" "tfc_gcp_service_account_email" {
+#   workspace_id  = tfe_workspace.hwakabh-tfworkspace.id
+#   key           = "TFC_GCP_RUN_SERVICE_ACCOUNT_EMAIL"
+#   value         = "terraform@hc-8732d2178369440c886cb59aee6.iam.gserviceaccount.com"
+#   category      = "env"
+#   description   = "The GCP service account email runs will use to authenticate."
+# }
 
 
 // Resource for GKE
