@@ -26,6 +26,7 @@ provider "google" {
 #   organization = var.tfc_organization_name
 # }
 
+
 // Fetch latest image of GKE node image
 // https://registry.terraform.io/providers/hashicorp/google/latest/docs/data-sources/container_engine_versions
 data "google_container_engine_versions" "gke_version" {
@@ -34,12 +35,16 @@ data "google_container_engine_versions" "gke_version" {
 }
 
 # // --- Resource for TFC
+# // Need not to code in HCL, since already created from UI
 # resource "tfe_workspace" "hwakabh-tfworkspace" {
 #   name         = var.tfc_workspace_name
 #   organization = var.tfc_organization_name
 #   project_id   = data.tfe_project.tfc_project.id
 # }
 
+# // Adding environmental variables in TFC
+# // Required Variables for Dynamic Credentials are:
+# // https://developer.hashicorp.com/terraform/cloud-docs/workspaces/dynamic-provider-credentials/gcp-configuration#required-environment-variables
 # resource "tfe_variable" "enable_gcp_provider_auth" {
 #   workspace_id  = tfe_workspace.hwakabh-tfworkspace.id
 #   key           = "TFC_GCP_PROVIDER_AUTH"
