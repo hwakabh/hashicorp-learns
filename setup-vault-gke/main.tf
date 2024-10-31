@@ -3,7 +3,7 @@ terraform {
   cloud {
     organization = "hwakabh-test"
     workspaces {
-      name = "setup-vault-gke"
+      name = var.tfc_workspace_name
     }
   }
 }
