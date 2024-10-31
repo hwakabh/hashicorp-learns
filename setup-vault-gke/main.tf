@@ -18,7 +18,6 @@ provider "helm" {
 }
 
 // TODO: Specify version: 1.17.7 (from installed 1.17.2) and add setup configuration with overrides
-// https://github.com/hashicorp/vault-helm/blob/main/values.yaml
 resource "helm_release" "vault_enterprise" {
   name        = "vault-enterprise"
   // https://github.com/hashicorp/vault-helm
@@ -27,4 +26,11 @@ resource "helm_release" "vault_enterprise" {
   // Need to create namespace to be installed (by k8s provider or kubectl)
   // before applying plans
   namespace   = "vault"
+
+  // Values Overrides
+  // https://github.com/hashicorp/vault-helm/blob/main/values.yaml
+  set {
+    name = "server.ingress.enabled"
+    value = "true"
+  }
 }
