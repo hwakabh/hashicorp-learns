@@ -1,5 +1,6 @@
 variable "tfc_organization_name" {
   type        = string
+  default     = "hwakabh-test"
   description = "The name of your Terraform Cloud organization"
 }
 
