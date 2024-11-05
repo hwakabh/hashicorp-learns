@@ -28,10 +28,13 @@ provider "helm" {
     }
 }
 resource "helm_release" "vault_ent" {
-  name        = "vault-ent"
+  name              = "vault-ent"
   // https://github.com/hashicorp/vault-helm
-  repository  = "https://helm.releases.hashicorp.com"
-  chart       = "vault"
+  repository        = "https://helm.releases.hashicorp.com"
+  chart             = "vault"
+  // Need to create namespace before tf-apply
+  namespace         = "vault"
+  create_namespace  = true
 
   // Values Overrides
   // https://github.com/hashicorp/vault-helm/blob/main/values.yaml
