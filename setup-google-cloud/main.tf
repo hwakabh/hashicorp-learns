@@ -1,14 +1,3 @@
-// Configurations for using TFC(HCP Terraform)
-terraform {
-  cloud {
-    organization = "hwakabh-test"
-    workspaces {
-      name = "setup-google-cloud"
-    }
-  }
-}
-
-// Provider Configurations
 provider "google" {
   project = var.project_id
   region  = var.region
