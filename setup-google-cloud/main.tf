@@ -92,7 +92,7 @@ resource "google_container_node_pool" "primary_nodes" {
 
   // 1.30.x defined in "data" block
   version = data.google_container_engine_versions.gke_version.release_channel_latest_version["STABLE"]
-  // default: 2 (in ./terraform.tfvars)
+  // default: 2 (in ./variables.tf)
   node_count = var.gke_num_nodes
 
   node_config {
