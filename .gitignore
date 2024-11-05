@@ -1,3 +1,6 @@
+# License
+*.hclic
+
 # Local .terraform directories
 **/.terraform/*
 

@@ -1,13 +1,3 @@
-// Configurations for using TFC(HCP Terraform)
-terraform {
-  cloud {
-    organization = "hwakabh-test"
-    workspaces {
-      name = "setup-vault-gke"
-    }
-  }
-}
-
 // Need to update fetch kubeconfig on HCP Terraform
 // https://registry.terraform.io/providers/hashicorp/helm/latest/docs
 // https://registry.terraform.io/providers/hashicorp/google/latest/docs/guides/using_gke_with_terraform#using-the-kubernetes-and-helm-providers
@@ -16,9 +6,9 @@ data "google_client_config" "provider" {}
 provider "google" {
   project = "hc-8732d2178369440c886cb59aee6"
   region  = "asia-east1"
+  // TODO: Need to replace with DPC
   // Passed terraform service-account credentials via GOOGLE_CREDENTIALS
 }
-
 
 data "google_container_cluster" "my_cluster" {
   name     = "tf-gke-cluster"
@@ -37,8 +27,7 @@ provider "helm" {
         }
     }
 }
-// TODO: Specify version: 1.17.7 (from installed 1.17.2) and add setup configuration with overrides
-resource "helm_release" "vault_enterprise" {
+resource "helm_release" "vault_ent" {
   name        = "vault-ent"
   // https://github.com/hashicorp/vault-helm
   repository  = "https://helm.releases.hashicorp.com"
