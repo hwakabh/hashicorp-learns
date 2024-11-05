@@ -53,4 +53,16 @@ resource "helm_release" "vault_enterprise" {
     name = "server.ingress.enabled"
     value = "true"
   }
+  set {
+    name = "server.image.repository"
+    value = "hashicorp/vault-enterprise"
+  }
+  set {
+    name = "server.image.tag"
+    value = "1.17.7-ent"
+  }
+  set {
+    name = "server.enterpriseLicense.secretKey"
+    value = "${var.vault_ent_license_value}"
+  }
 }
