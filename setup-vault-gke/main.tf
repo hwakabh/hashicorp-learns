@@ -55,13 +55,13 @@ resource "helm_release" "vault_ent" {
     value = "Always"
   }
   set {
-    name = "server.enterpriseLicense.secretKey"
-    value = "${var.vault_ent_license_value}"
-  }
-  set {
     // https://developer.hashicorp.com/vault/docs/platform/k8s/helm/enterprise
     name = "server.enterpriseLicense.secretName"
     value = "vault-ent-license"
+  }
+  set {
+    name = "server.enterpriseLicense.secretKey"
+    value = "license"
   }
 
   set {
