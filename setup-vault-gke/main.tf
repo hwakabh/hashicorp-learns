@@ -51,10 +51,6 @@ resource "helm_release" "vault_enterprise" {
     value = "vault"
   }
   set {
-    name = "server.ingress.enabled"
-    value = "true"
-  }
-  set {
     name = "server.image.repository"
     value = "hashicorp/vault-enterprise"
   }
@@ -70,4 +66,15 @@ resource "helm_release" "vault_enterprise" {
     name = "server.enterpriseLicense.secretKey"
     value = "${var.vault_ent_license_value}"
   }
+  set {
+    // https://developer.hashicorp.com/vault/docs/platform/k8s/helm/enterprise
+    name = "server.enterpriseLicense.secretName"
+    value = "vault-ent-license"
+  }
+
+  set {
+    name = "server.ingress.enabled"
+    value = "true"
+  }
+
 }
