@@ -76,6 +76,7 @@ storage "file" {
   path = "/vault/data"
 }
 seal "gcpckms" {
+    credentials = /vault/userconfig/vault-kms-credentials/vault-unseal.key.json
     project     = "hc-8732d2178369440c886cb59aee6"
     region      = "global"
     key_ring    = "vault-ent-cloudkeys"
