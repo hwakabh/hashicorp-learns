@@ -58,7 +58,7 @@ resource "helm_release" "vault_ent" {
   // Ref: https://developer.hashicorp.com/vault/docs/platform/k8s/helm/enterprise
   // for server.enterpriseLicense.secretKey, we can use default `license` as described
   set {
-    name = "server.enterpriseLicense"
+    name = "server.enterpriseLicense.secretName"
     value = "vault-ent-license"
   }
   // https://developer.hashicorp.com/vault/docs/platform/k8s/helm/terraform
