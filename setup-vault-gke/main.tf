@@ -27,6 +27,46 @@ provider "helm" {
         }
     }
 }
+
+// Values Overrides
+// Ref: https://github.com/hashicorp/vault-helm/blob/main/values.yaml
+// For applying Enterprise licenses
+// Ref: https://developer.hashicorp.com/vault/docs/platform/k8s/helm/enterprise
+// for server.enterpriseLicense.secretKey, we can use default `license` as described
+data "template_file" "vault_overrides" {
+  template = <<EOF
+global:
+  namespace: 'vault'
+server:
+  image:
+    repository: 'hashicorp/vault-enterprise'
+    tag: '1.17.7-ent'
+    pullPolicy: 'Always'
+  enterpriseLicense:
+    secretName: 'vault-ent-license'
+  standalone:
+    config: |-
+      ui = true
+      log_level = "debug"
+      listener "tcp" {
+        tls_disable = 1
+        address = "[::]:8200"
+        cluster_address = "[::]:8201"
+      }
+      storage "file" {
+        path = "/vault/data"
+      }
+      seal "gcpckms" {
+         project     = "hc-8732d2178369440c886cb59aee6"
+         region      = "global"
+         key_ring    = "vault-ent-cloudkeys"
+         crypto_key  = "vault-crypto-key"
+      }
+  ingress:
+    enabled: true
+EOF
+}
+
 resource "helm_release" "vault_ent" {
   name              = "vault-ent"
   // https://github.com/hashicorp/vault-helm
@@ -35,38 +75,5 @@ resource "helm_release" "vault_ent" {
   // Need to create namespace before tf-apply
   namespace         = "vault"
   create_namespace  = true
-
-  // Values Overrides
-  // https://github.com/hashicorp/vault-helm/blob/main/values.yaml
-  set {
-    name = "global.namespace"
-    value = "vault"
-  }
-  set {
-    name = "server.image.repository"
-    value = "hashicorp/vault-enterprise"
-  }
-  set {
-    name = "server.image.tag"
-    value = "1.17.7-ent"
-  }
-  set {
-    name = "server.image.pullPolicy"
-    value = "Always"
-  }
-  set {
-    // https://developer.hashicorp.com/vault/docs/platform/k8s/helm/enterprise
-    name = "server.enterpriseLicense.secretName"
-    value = "vault-ent-license"
-  }
-  set {
-    name = "server.enterpriseLicense.secretKey"
-    value = "license"
-  }
-
-  set {
-    name = "server.ingress.enabled"
-    value = "true"
-  }
-
+  values            = "${data.template_file.vault_overrides.rendered}"
 }

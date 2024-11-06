@@ -9,7 +9,9 @@ variable "tfc_workspace_name" {
   description = "The name of the workspace that you'd like to create and connect to GCP"
 }
 
-variable "vault_ent_license_value" {
-  type        = string
-  description = "Vault Enterprise License string"
-}
+// Need not to pass from environmental variables, since it will be passed from kind: Secret
+// Refer default values in "server.enterpriseLicense" field
+# variable "vault_ent_license_value" {
+#   type        = string
+#   description = "Vault Enterprise License string"
+# }
