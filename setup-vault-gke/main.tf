@@ -114,6 +114,6 @@ EOF
   }
   set {
     name = "server.extraArgs"
-    value = "-config=/vault/userconfig/vault-kms-credentials/vault-unseal.key.json:"
+    value = "-config=/vault/userconfig/vault-kms-credentials/vault-unseal.key.json"
   }
 }
