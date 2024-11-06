@@ -84,5 +84,36 @@ seal "gcpckms" {
 EOF
   }
 
+  // Passing another dedicated service-account credentials for avoidings `GOOGLE_CREDENTIALS`
+  // whereas service-account for TFC will use DPC
+  // Ref: https://developer.hashicorp.com/vault/docs/platform/k8s/helm/run#protecting-sensitive-vault-configurations
+  set {
+    name  = "server.volumes[0].name"
+    value = "vault-kms-credentials"
+  }
+  set {
+    name  = "server.volumes[0].secret.defaultMode"
+    value = "420"
+  }
+  set {
+    name  = "server.volumes[0].secret.secretName"
+    value = "vault-kms-credentials"
+  }
 
+  set {
+    name  = "server.volumeMounts[0].mountPath"
+    value = "/vault/userconfig/vault-kms-credentials"
+  }
+  set {
+    name  = "server.volumeMounts[0].name"
+    value = "vault-kms-credentials"
+  }
+  set {
+    name  = "server.volumeMounts[0].readOnly"
+    value = "true"
+  }
+  set {
+    name = "server.extraArgs"
+    value = "-config=/vault/userconfig/vault-kms-credentials/vault-unseal.key.json:"
+  }
 }
