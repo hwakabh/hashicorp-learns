@@ -49,7 +49,7 @@ resource "helm_release" "vault_ent" {
   }
   set {
     name = "server.image.tag"
-    value = "1.17.7=ent"
+    value = "1.17.7-ent"
   }
   set {
     name = "server.image.pullPolicy"
