@@ -73,6 +73,10 @@ resource "helm_release" "vault_primary_cluster" {
     value = "vault.doormatgke.gcp.sbx.hashicorpdemo.com"
   }
   set {
+    name  = "server.ingress.pathType"
+    value = "Prefix"
+  }
+  set {
     name = "server.ingress.extraPaths[0].path"
     value = "/*"
   }
