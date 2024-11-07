@@ -1,0 +1,21 @@
+services:
+  vault:
+    # https://hub.docker.com/r/hashicorp/vault-enterprise/tags?name=1.17.7-ent
+    image: hashicorp/vault-enterprise:1.17.7-ent
+    container_name: vault-ent
+    ports:
+      - "8200:8200"
+    environment:
+      - VAULT_ADDR=http://0.0.0.0:8200
+      - VAULT_API_ADDR=http://0.0.0.0:8200
+      - VAULT_ADDRESS=http://0.0.0.0:8200
+      - VAULT_LICENSE_PATH=/vault/config/vault.hclic
+    volumes:
+      - ./vault.hcl:/vault/config/vault.hcl
+      # gitignored
+      - ./vault-unseal.key.json:/vault/config/vault-unseal.key.json
+      - ./vault.hclic:/vault/config/vault.hclic
+    cap_add:
+      - IPC_LOCK
+    # Starting up Vault with non-dev mode
+    entrypoint: vault server -config=/vault/config/vault.hcl
