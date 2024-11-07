@@ -22,6 +22,7 @@ variable "gke_num_nodes" {
 variable "gke_cluster_name" {
   type        = string
   description = "Name of GKE Cluster created"
+  default     = "hwakabh-tf-gke"
 }
 
 variable "gke_network_prefix" {
