@@ -37,10 +37,18 @@ resource "helm_release" "vault_ent" {
   create_namespace  = true
 
   // Values Overrides
-  // Ref: https://github.com/hashicorp/vault-helm/blob/main/values.yaml
+  // https://github.com/hashicorp/vault-helm/blob/main/values.yaml
+  // https://developer.hashicorp.com/vault/docs/platform/k8s/helm/terraform
   set {
     name = "global.namespace"
     value = "vault"
+  }
+  // Vault enterprise
+  // Ref: https://developer.hashicorp.com/vault/docs/platform/k8s/helm/enterprise
+  // for server.enterpriseLicense.secretKey, we can use default `license` as described
+  set {
+    name = "server.enterpriseLicense.secretName"
+    value = "vault-ent-license"
   }
   set {
     name = "server.image.repository"
@@ -50,29 +58,64 @@ resource "helm_release" "vault_ent" {
     name = "server.image.tag"
     value = "1.17.7-ent"
   }
+  // ingress
   set {
-    name = "server.image.pullPolicy"
-    value = "Always"
+    name = "server.ingress.enabled"
+    value = "true"
   }
-  // Ref: https://developer.hashicorp.com/vault/docs/platform/k8s/helm/enterprise
-  // for server.enterpriseLicense.secretKey, we can use default `license` as described
   set {
-    name = "server.enterpriseLicense.secretName"
-    value = "vault-ent-license"
+    name = "server.ingress.annotations"
+    value = yamlencode({
+      "kubernetes.io/ingress.class": "gce"
+    })
+    type = "auto"
   }
-  // https://developer.hashicorp.com/vault/docs/platform/k8s/helm/terraform
   set {
-    name = "server.standalone.config"
+    name  = "server.ingress.hosts[0].host"
+    value = "vault.hc-8732d2178369440c886cb59aee6.gcp.sbx.hashicorpdemo.com"
+  }
+  set {
+    name  = "server.ingress.hosts[0].paths[0].path"
+    value = "/"
+  }
+  set {
+    name  = "server.ingress.hosts[0].paths[0].backend.service.name"
+    value = "vault"
+  }
+  set {
+    name  = "server.ingress.hosts[0].paths[0].backend.service.port.number"
+    value = "8200"
+  }
+  // Vault cluster
+  set {
+    name = "server.standalone.enabled"
+    value = "false"
+  }
+  set {
+    name = "server.ha.enabled"
+    value = "true"
+  }
+  set {
+    name = "server.ha.replicas"
+    value = 3
+  }
+  set {
+    name = "server.ha.raft.enabled"
+    value = "true"
+  }
+  set {
+    name = "server.ha.raft.setNodeId"
+    value = "true"
+  }
+  set {
+    name = "server.ha.raft.config"
     value = <<EOF
 ui = true
-log_level = "debug"
+cluster_name = "vault-cluster"
 listener "tcp" {
-  tls_disable = 1
+  tls_disable = true
   address = "[::]:8200"
   cluster_address = "[::]:8201"
-}
-storage "file" {
-  path = "/vault/data"
 }
 seal "gcpckms" {
     credentials = "/vault/userconfig/vault-kms-credentials/vault-unseal.key.json"
@@ -81,6 +124,19 @@ seal "gcpckms" {
     key_ring    = "vault-ent-cloudkeys"
     crypto_key  = "vault-crypto-key"
 }
+storage "raft" {
+  path = "/vault/data"
+  retry_join {
+    leader_api_addr = "http://vault-ha-0.vault-ha-internal:8200"
+  }
+  retry_join {
+    leader_api_addr = "http://vault-ha-1.vault-ha-internal:8200"
+  }
+  retry_join {
+    leader_api_addr = "http://vault-ha-2.vault-ha-internal:8200"
+  }
+}
+service_registration "kubernetes" {}
 EOF
   }
 

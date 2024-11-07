@@ -3,48 +3,38 @@
 # https://raw.githubusercontent.com/hashicorp/vault-helm/refs/heads/main/values.yaml
 
 global:
-  enabled: true
   namespace: "vault"
-  tlsDisable: true
 
 server:
-  enabled: "-"
   enterpriseLicense:
     secretName: "vault-ent-license"
   image:
     repository: "hashicorp/vault-enterprise"
     tag: "1.17.7-ent"
-    pullPolicy: Always
   logLevel: "debug"
   ingress:
     enabled: true
-    labels: {}
     # https://cloud.google.com/kubernetes-engine/docs/concepts/ingress#deprecated_annotation
     #ingressClassName: ""
-    annotations: {}
+    annotations:
       kubernetes.io/ingress.class: gce
       # kubernetes.io/tls-acme: "true"
     pathType: Prefix
     hosts:
       - host: vault.hc-8732d2178369440c886cb59aee6.gcp.sbx.hashicorpdemo.com
-        paths: []
+        paths:
           - path: /
             backend:
               service:
                 name: vault
                 port:
                   number: 8200
-    tls: []
-    #  - secretName: chart-example-tls
-    #    hosts:
-    #      - chart-example.local
 
   extraArgs: "-config=/vault/userconfig/vault-kms-credentials/vault-unseal.key.json"
   # extraEnvironmentVars is a list of extra environment variables to set with the stateful set. These could be
   # used to include variables required for auto-unseal.
   extraEnvironmentVars:
     VAULT_SKIP_VERIFY: true
-    # VAULT_CACERT: /vault/userconfig/tls-ca/tls.crt
   # extraSecretEnvironmentVars is a list of extra environment variables to set with the stateful set.
   # These variables take value from existing Secret objects.
   extraSecretEnvironmentVars: []
@@ -57,65 +47,19 @@ server:
       secret:
         secretName: vault-kms-credentials
         defaultMode: 420
-    # - name: tls-server
-    #   secret:
-    #     secretName: tls-server
-    #     defaultMode: 420
-    # - name: tls-ca
-    #   secret:
-    #     secretName: tls-ca
-    #     defaultMode: 420
   volumeMounts:
     - mountPath: /vault/userconfig/vault-kms-credentials
       name: vault-kms-credentials
       readOnly: true
-    # - mountPath: /vault/userconfig/tls-server
-    #   name: tls-server
-    #   readOnly: true
-    # - mountPath: /vault/userconfig/tls-ca
-    #   name: tls-ca
-    #   readOnly: true
-
-  # Enables network policy for server pods
-  networkPolicy:
-    enabled: false
-    egress: []
-    # egress:
-    # - to:
-    #   - ipBlock:
-    #       cidr: 10.0.0.0/24
-    #   ports:
-    #   - protocol: TCP
-    #     port: 443
-    ingress:
-      - from:
-        - namespaceSelector: {}
-        ports:
-        - port: 8200
-          protocol: TCP
-        - port: 8201
-          protocol: TCP
 
   standalone:
     enabled: false
+
   ha:
+    # default ha.replicas = 3
     enabled: true
-    replicas: 3
-
-    # Set the api_addr configuration for Vault HA
-    # See https://developer.hashicorp.com/vault/docs/configuration#api_addr
-    # If set to null, this will be set to the Pod IP Address
-    apiAddr: null
-
-    # Set the cluster_addr configuration for Vault HA
-    # See https://developer.hashicorp.com/vault/docs/configuration#cluster_addr
-    # If set to null, this will be set to https://$(HOSTNAME).{{ template "vault.fullname" . }}-internal:8201
-    clusterAddr: null
-
     raft:
-      # Enables Raft integrated storage
       enabled: true
-      # Set the Node Raft ID to the name of the pod
       setNodeId: true
       config: |-
         ui = true
@@ -145,30 +89,6 @@ server:
           }
         }
         service_registration "kubernetes" {}
-    # config: ""
 
 ui:
   enabled: true
-  publishNotReadyAddresses: true
-  activeVaultPodOnly: false
-  serviceType: "ClusterIP"
-  serviceNodePort: null
-  externalPort: 8200
-  targetPort: 8200
-
-  # The externalTrafficPolicy can be set to either Cluster or Local
-  # and is only valid for LoadBalancer and NodePort service types.
-  # The default value is Cluster.
-  # ref: https://kubernetes.io/docs/concepts/services-networking/service/#external-traffic-policy
-  externalTrafficPolicy: Cluster
-
-  #loadBalancerSourceRanges:
-  #   - 10.0.0.0/16
-  #   - 1.78.23.3/32
-
-  # loadBalancerIP:
-
-  # Extra annotations to attach to the ui service
-  # This can either be YAML or a YAML-formatted multi-line templated string map
-  # of the annotations to apply to the ui service
-  annotations: {}
