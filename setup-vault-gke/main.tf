@@ -4,17 +4,17 @@
 data "google_client_config" "provider" {}
 
 provider "google" {
-  project = "hc-8732d2178369440c886cb59aee6"
-  region  = "asia-east1"
+  project = "${var.google_cloud_project_id}"
+  region  = "${var.google_cloud_region}"
 }
 
 data "google_container_cluster" "my_cluster" {
-  name     = "tf-gke-cluster"
-  location = "asia-east1"
+  name     = "${var.gke_cluster_name}"
+  location = "${var.google_cloud_region}"
 }
 
 provider "helm" {
-    kubernetes{
+    kubernetes {
         host  = "https://${data.google_container_cluster.my_cluster.endpoint}"
         token = data.google_client_config.provider.access_token
         cluster_ca_certificate = base64decode(
@@ -28,11 +28,10 @@ provider "helm" {
 }
 
 // https://github.com/hashicorp/vault-helm
-resource "helm_release" "vault_ent" {
-  name              = "vault-ent"
+resource "helm_release" "vault_primary_cluster" {
+  name              = "vault-ha"
   repository        = "https://helm.releases.hashicorp.com"
   chart             = "vault"
-  // Need to create namespace before tf-apply
   namespace         = "vault"
   create_namespace  = true
 
@@ -72,23 +71,7 @@ resource "helm_release" "vault_ent" {
   }
   set {
     name  = "server.ingress.hosts[0].host"
-    value = "vault.hc-8732d2178369440c886cb59aee6.gcp.sbx.hashicorpdemo.com"
-  }
-  set {
-    name  = "server.ingress.hosts[0].paths[0].path"
-    value = "/"
-  }
-  set {
-    name  = "server.ingress.hosts[0].paths[0].pathType"
-    value = "Prefix"
-  }
-  set {
-    name  = "server.ingress.hosts[0].paths[0].backend.service.name"
-    value = "vault"
-  }
-  set {
-    name  = "server.ingress.hosts[0].paths[0].backend.service.port.number"
-    value = "8200"
+    value = "vault.hc-8b1ddb1733494af2af02d477176.gcp.sbx.hashicorpdemo.com."
   }
   // Vault cluster
   set {
@@ -123,7 +106,7 @@ listener "tcp" {
 }
 seal "gcpckms" {
     credentials = "/vault/userconfig/vault-kms-credentials/vault-unseal.key.json"
-    project     = "hc-8732d2178369440c886cb59aee6"
+    project     = "hc-8b1ddb1733494af2af02d477176"
     region      = "global"
     key_ring    = "vault-ent-cloudkeys"
     crypto_key  = "vault-crypto-key"

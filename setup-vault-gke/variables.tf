@@ -1,10 +1,15 @@
-variable "tfc_organization_name" {
-  type        = string
-  default     = "hwakabh-test"
-  description = "The name of your Terraform Cloud organization"
+variable "google_cloud_project_id" {
+  type = string
+  description = "The ID of Google Cloud project where GKE cluster is running"
 }
 
-variable "tfc_workspace_name" {
+variable "google_cloud_region" {
+  type = string
+  description = "Google Cloud regions for terraform-provider-google"
+}
+
+variable "gke_cluster_name" {
   type        = string
-  description = "The name of the workspace that you'd like to create and connect to GCP"
+  description = "Name of GKE Cluster created"
+  default     = "hwakabh-tf-gke"
 }

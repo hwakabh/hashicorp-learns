@@ -20,15 +20,7 @@ server:
       kubernetes.io/ingress.class: gce
       # kubernetes.io/tls-acme: "true"
     hosts:
-      - host: vault.hc-8732d2178369440c886cb59aee6.gcp.sbx.hashicorpdemo.com
-        paths:
-          - path: /
-            pathType: Prefix
-            backend:
-              service:
-                name: vault
-                port:
-                  number: 8200
+      - host: vault.hc-8b1ddb1733494af2af02d477176.gcp.sbx.hashicorpdemo.com
 
   extraArgs: "-config=/vault/userconfig/vault-kms-credentials/vault-unseal.key.json"
   # extraEnvironmentVars is a list of extra environment variables to set with the stateful set. These could be
