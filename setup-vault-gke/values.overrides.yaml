@@ -19,11 +19,11 @@ server:
     annotations:
       kubernetes.io/ingress.class: gce
       # kubernetes.io/tls-acme: "true"
-    pathType: Prefix
     hosts:
       - host: vault.hc-8732d2178369440c886cb59aee6.gcp.sbx.hashicorpdemo.com
         paths:
           - path: /
+            pathType: Prefix
             backend:
               service:
                 name: vault

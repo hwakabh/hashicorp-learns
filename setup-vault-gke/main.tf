@@ -76,7 +76,11 @@ resource "helm_release" "vault_ent" {
   }
   set {
     name  = "server.ingress.hosts[0].paths[0].path"
-    value = "/vault-ui"
+    value = "/"
+  }
+  set {
+    name  = "server.ingress.hosts[0].paths[0].pathType"
+    value = "Prefix"
   }
   set {
     name  = "server.ingress.hosts[0].paths[0].backend.service.name"
