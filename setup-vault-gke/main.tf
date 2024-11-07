@@ -44,7 +44,6 @@ resource "helm_release" "vault_primary_cluster" {
   }
   // Vault enterprise
   // Ref: https://developer.hashicorp.com/vault/docs/platform/k8s/helm/enterprise
-  // for server.enterpriseLicense.secretKey, we can use default `license` as described
   set {
     name = "server.enterpriseLicense.secretName"
     value = "vault-ent-license"
@@ -105,7 +104,7 @@ listener "tcp" {
   cluster_address = "[::]:8201"
 }
 seal "gcpckms" {
-    credentials = "/vault/userconfig/vault-kms-credentials/vault-unseal.key.json"
+    credentials = "/vault/userconfig/vault-kms-credentials/vault-kms.key.json"
     project     = "hc-8b1ddb1733494af2af02d477176"
     region      = "global"
     key_ring    = "vault-ent-cloudkeys"
@@ -157,6 +156,6 @@ EOF
   }
   set {
     name = "server.extraArgs"
-    value = "-config=/vault/userconfig/vault-kms-credentials/vault-unseal.key.json"
+    value = "-config=/vault/userconfig/vault-kms-credentials/vault-kms.key.json"
   }
 }
