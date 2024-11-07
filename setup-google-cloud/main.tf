@@ -14,7 +14,7 @@ data "google_container_engine_versions" "gke_version" {
 // Resource for GKE
 resource "google_compute_network" "vpc" {
   name                    = "${var.gke_network_prefix}-vpc"
-  auto_create_subnetworks = "false"
+  auto_create_subnetworks = false
 }
 
 resource "google_compute_subnetwork" "subnet" {
@@ -58,7 +58,7 @@ resource "google_container_node_pool" "primary_nodes" {
     machine_type = "n1-standard-1"
     tags         = ["gke-node", "${var.google_cloud_project_id}-gke"]
     metadata = {
-      disable-legacy-endpoints = "true"
+      disable-legacy-endpoints = true
     }
   }
 }

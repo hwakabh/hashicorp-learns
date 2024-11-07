@@ -103,4 +103,24 @@ EOF
 % gcloud iam service-accounts add-iam-policy-binding terraform@${YOUR_GCP_PROJECT}.iam.gserviceaccount.com \
 --member="principalSet://iam.googleapis.com/projects/${YOUR_PROJECT_NUMBER}/locations/global/workloadIdentityPools/tfc-id-pool/*" \
 --role="roles/iam.workloadIdentityUser"
+
+% gcloud iam service-accounts add-iam-policy-binding terraform@${YOUR_GCP_PROJECT}.iam.gserviceaccount.com \
+--member="serviceAccount:terraform@${YOUR_GCP_PROJECT}.iam.gserviceaccount.com" \
+--role="roles/iam.serviceAccountTokenCreator"
+
+# If just operating `terraform plan` only, we need not to bind editor roles
+% gcloud iam service-accounts add-iam-policy-binding terraform@${YOUR_GCP_PROJECT}.iam.gserviceaccount.com \
+--member="serviceAccount:terraform@${YOUR_GCP_PROJECT}.iam.gserviceaccount.com" \
+--role="roles/editor"
 ```
+
+After all the required resources created in Google Cloud side, need to add values for:
+- `TFC_GCP_PROVIDER_AUTH`
+  - value: `true`
+  - for enabling DPC features
+- `TFC_GCP_RUN_SERVICE_ACCOUNT_EMAIL`
+  - value: `terraform@${YOUR_GCP_PROJECT}.iam.gserviceaccount.com`
+  - service-account emails which TFC will use to provision GKE cluster
+- `TFC_GCP_WORKLOAD_PROVIDER_NAME`
+  - value: `/projects/${YOUR_PROJECT_NUMBER}/locations/global/workloadIdentityPools/tfc-id-pool`
+  - OIDC Provider information to issue temporary token
