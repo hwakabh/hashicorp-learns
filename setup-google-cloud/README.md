@@ -33,7 +33,7 @@ For general use of TFC with Google Cloud, need to create dedicated Service Accou
 # Add IAM roles to dedicated service-account
 % gcloud projects add-iam-policy-binding ${YOUR_GCP_PROJECT} \
 --member="serviceAccount:terraform@${YOUR_GCP_PROJECT}.iam.gserviceaccount.com" \
---role="roles/container.admin"
+--role=roles/container.admin
 # ...
 
 % gcloud projects add-iam-policy-binding ${YOUR_GCP_PROJECT} \
@@ -104,14 +104,14 @@ EOF
 --member="principalSet://iam.googleapis.com/projects/${YOUR_PROJECT_NUMBER}/locations/global/workloadIdentityPools/tfc-id-pool/*" \
 --role="roles/iam.workloadIdentityUser"
 
-% gcloud iam service-accounts add-iam-policy-binding terraform@${YOUR_GCP_PROJECT}.iam.gserviceaccount.com \
+% gcloud projects add-iam-policy-binding ${YOUR_GCP_PROJECT} \
 --member="serviceAccount:terraform@${YOUR_GCP_PROJECT}.iam.gserviceaccount.com" \
---role="roles/iam.serviceAccountTokenCreator"
+--role=roles/iam.serviceAccountTokenCreator
 
 # If just operating `terraform plan` only, we need not to bind editor roles
-% gcloud iam service-accounts add-iam-policy-binding terraform@${YOUR_GCP_PROJECT}.iam.gserviceaccount.com \
+% gcloud projects add-iam-policy-binding ${YOUR_GCP_PROJECT} \
 --member="serviceAccount:terraform@${YOUR_GCP_PROJECT}.iam.gserviceaccount.com" \
---role="roles/editor"
+--role=roles/editor
 ```
 
 After all the required resources created in Google Cloud side, need to add values for:
