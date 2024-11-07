@@ -70,7 +70,7 @@ resource "helm_release" "vault_primary_cluster" {
   }
   set {
     name  = "server.ingress.hosts[0].host"
-    value = "vault.hc-8b1ddb1733494af2af02d477176.gcp.sbx.hashicorpdemo.com."
+    value = "vault.doormatgke.gcp.sbx.hashicorpdemo.com"
   }
   // Vault cluster
   set {
