@@ -72,6 +72,18 @@ resource "helm_release" "vault_primary_cluster" {
     name  = "server.ingress.hosts[0].host"
     value = "vault.doormatgke.gcp.sbx.hashicorpdemo.com"
   }
+  set {
+    name = "server.ingress.extraPaths[0].path"
+    value = "/*"
+  }
+  set {
+    name = "server.ingress.extraPaths[0].backend.service.name"
+    value = "vault"
+  }
+  set {
+    name = "server.ingress.extraPaths[0].backend.service.port.number"
+    value = "8200"
+  }
   // Vault cluster
   set {
     name = "server.standalone.enabled"
