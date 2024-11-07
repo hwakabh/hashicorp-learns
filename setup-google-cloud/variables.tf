@@ -1,51 +1,37 @@
-variable "project_id" {
-  description = "Google Cloud Project ID"
+variable "google_cloud_project_id" {
   type        = string
+  description = "The ID of Google Cloud project where GKE cluster is running"
 }
 
-variable "region" {
-  description = "Region resource to be created"
+variable "google_cloud_region" {
   type        = string
+  description = "Google Cloud regions for terraform-provider-google"
 }
 
-variable "zone" {
-  description = "Zone resource to be created"
+variable "google_cloud_zone" {
   type        = string
-}
-
-variable "gke_username" {
-  default     = ""
-  description = "Username for GKE nodes"
-}
-
-variable "gke_password" {
-  default     = ""
-  description = "Password for GKE node(s)"
+  description = "Google Cloud regions for terraform-provider-google"
 }
 
 variable "gke_num_nodes" {
+  type        = number
+  description = "Number of gke nodes"
   default     = 1
-  description = "number of gke nodes"
 }
 
-// For DPC (Dynamic Provider Credentials)
-variable "tfc_hostname" {
+variable "gke_cluster_name" {
   type        = string
-  description = "The hostname of the TFC or TFE instance you'd like to use with GCP"
+  description = "Name of GKE Cluster created"
 }
 
-variable "tfc_project_name" {
+variable "gke_network_prefix" {
   type        = string
-  default     = "Default Project"
-  description = "The project under which a workspace will be created"
+  description = "Name of VPC where GKE cluster would be provisioned"
+  default     = "hwakabh-gke"
 }
 
-variable "tfc_organization_name" {
+variable "gke_subnet_cidr" {
   type        = string
-  description = "The name of your Terraform Cloud organization"
-}
-
-variable "tfc_workspace_name" {
-  type        = string
-  description = "The name of the workspace that you'd like to create and connect to GCP"
+  description = "CIDR of VPC Subnet where each GKE Node would connect"
+  default     = "10.10.0.0/24"
 }
