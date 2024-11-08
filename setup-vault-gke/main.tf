@@ -86,7 +86,7 @@ resource "helm_release" "vault_primary_cluster" {
 
   set {
     name = "server.ingress.extraPaths[0].backend.service.name"
-    value = "vault"
+    value = "vault-ha"
   }
   set {
     name = "server.ingress.extraPaths[0].backend.service.port.number"
