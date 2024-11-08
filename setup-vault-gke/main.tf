@@ -73,13 +73,17 @@ resource "helm_release" "vault_primary_cluster" {
     value = "vault.doormatgke.gcp.sbx.hashicorpdemo.com"
   }
   set {
-    name  = "server.ingress.pathType"
-    value = "Prefix"
-  }
-  set {
     name = "server.ingress.extraPaths[0].path"
     value = "/*"
   }
+  // https://github.com/hashicorp/vault-helm/issues/792#issuecomment-1273915550
+  // By default, pathType: true is definied in default values.yaml as following, but need to add
+  // https://github.com/hashicorp/vault-helm/blob/main/values.yaml#L427
+  set {
+    name = "server.ingress.extraPaths[0].pathType"
+    value = "Prefix"
+  }
+
   set {
     name = "server.ingress.extraPaths[0].backend.service.name"
     value = "vault"
