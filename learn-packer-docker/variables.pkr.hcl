@@ -1,10 +1,10 @@
 variable "container_registry_url" {
-  type = string
+  type        = string
   description = "Container registry URL to push container images"
 }
 
 variable "container_registry_username" {
-  type = string
+  type        = string
   description = "Username for pushing images to container registry"
 }
 
