@@ -9,9 +9,9 @@ packer {
 
 // declare to create image for docker
 // and source named as nginx
-source "docker" "nginx" {
+source "docker" "my-nginx" {
   // define source container images
-  image  = "nginx:latest"
+  image  = "nginx:1.27-alpine-slim"
   commit = true
 }
 
@@ -19,13 +19,20 @@ source "docker" "nginx" {
 build {
   name = "hello-packer"
   sources = [
-    "source.docker.nginx"
+    "source.docker.my-nginx"
   ]
   provisioner "shell" {
-    inline = ["echo \"hello world\""]
+    inline = ["echo \"hello world\" >> hello.md"]
   }
   provisioner "shell" {
-    inline = ["echo \"hello another world\""]
+    inline = ["echo \"hello another world\" >> hello.md"]
+  }
+
+  // By default, builder provide no name for image (ref: docker image ls)
+  post-processor "docker-tag" {
+    repository = "hello-packer"
+    tags       = ["latest"]
+    only       = ["docker.my-nginx"]
   }
 
 }
