@@ -10,8 +10,8 @@ packer {
 variable "github_pat" {
   type        = string
   description = "PAT for pushing images to ghcr.io"
-  # TODO: add notes for gitignored, or enable to accept as stdin
   default     = "YOUR_GITHUB_PAT"
+  # TODO: add notes for gitignored, or enable to accept as stdin
 }
 
 
@@ -30,6 +30,21 @@ build {
     "source.docker.my-nginx"
   ]
 
+  // Need to export HCP_CLIENT_ID & HCP_CLIENT_SECRET
+  // https://developer.hashicorp.com/packer/tutorials/hcp-get-started/hcp-push-artifact-metadata
+  hcp_packer_registry {
+    bucket_name = "docker-nginx"
+    description = "artifacts by packer-plugin-docker"
+    bucket_labels = {
+      "owner" = "hwakabh"
+      "type"  = "container-images"
+    }
+    build_labels = {
+      "build-time"   = timestamp()
+      "build-source" = basename(path.cwd)
+    }
+  }
+
   // https://developer.hashicorp.com/packer/docs/provisioners/shell
   provisioner "shell" {
     inline = ["echo \"hello world\" >> hello.md"]
@@ -37,7 +52,6 @@ build {
   provisioner "shell" {
     inline = ["echo \"hello another world\" >> hello.md"]
   }
-
 
   // ref: https://github.com/hashicorp/packer-plugin-docker/issues/151
   // by default, package visibility is `private`
