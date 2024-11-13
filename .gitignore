@@ -1,6 +1,7 @@
 # License / service-account Credentials
 *.hclic
 *.key.json
+*.pem
 
 # Local .terraform directories
 **/.terraform/*
@@ -12,6 +13,7 @@
 # Crash log files
 crash.log
 crash.*.log
+build.log
 
 # Exclude all .tfvars files, which are likely to contain sensitive data, such as
 # password, private keys, and other secrets. These should not be part of version
