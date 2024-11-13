@@ -13,7 +13,7 @@ provider "docker" {}
 // Pull docker image
 resource "docker_image" "img" {
   name         = "nginx:1.27-alpine-slim"
-  keep_locally = true
+  keep_locally = false
 }
 
 // Run container
