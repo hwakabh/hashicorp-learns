@@ -7,6 +7,14 @@ packer {
   }
 }
 
+variable "github_pat" {
+  type        = string
+  description = "PAT for pushing images to ghcr.io"
+  # TODO: add notes for gitignored, or enable to accept as stdin
+  default     = "YOUR_GITHUB_PAT"
+}
+
+
 // declare to create image for docker
 // and source named as nginx
 source "docker" "my-nginx" {
@@ -21,6 +29,8 @@ build {
   sources = [
     "source.docker.my-nginx"
   ]
+
+  // https://developer.hashicorp.com/packer/docs/provisioners/shell
   provisioner "shell" {
     inline = ["echo \"hello world\" >> hello.md"]
   }
@@ -28,12 +38,26 @@ build {
     inline = ["echo \"hello another world\" >> hello.md"]
   }
 
-  // By default, builder provide no name for image (ref: docker image ls)
-  post-processor "docker-tag" {
-    repository = "hello-packer"
-    tags       = ["latest"]
-    only       = ["docker.my-nginx"]
-  }
 
+  // ref: https://github.com/hashicorp/packer-plugin-docker/issues/151
+  // by default, package visibility is `private`
+  post-processors {
+    // By default, builder provide no name for image (ref: docker image ls)
+    // ref: https://developer.hashicorp.com/packer/integrations/hashicorp/docker/latest/components/post-processor/docker-tag
+    post-processor "docker-tag" {
+      repository = "ghcr.io/hwakabh/hello-packer"
+      tags       = ["latest"]
+      only       = ["docker.my-nginx"]
+    }
+
+    // Push to GHCR
+    // ref: https://developer.hashicorp.com/packer/integrations/hashicorp/docker/latest/components/post-processor/docker-push
+    post-processor "docker-push" {
+      login          = true
+      login_server   = "ghcr.io"
+      login_username = "hwakabh"
+      login_password = "${var.github_pat}"
+    }
+  }
 }
 
