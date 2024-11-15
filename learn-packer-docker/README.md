@@ -16,9 +16,9 @@ For pushing metadata to HCP Packer Registry, we need to do several operations as
 
 # Add policy bindings to your project
 % hcp projects iam add-binding \
-> --project=${your_project_id} \
-> --member=$(hcp iam service-principals read packer --format=json |jq -r .id) \
-> --role=roles/contributor
+--project=${your_project_id} \
+--member=$(hcp iam service-principals read packer --format=json |jq -r .id) \
+--role=roles/contributor
 
 # Navigate to HCP Packer via Browser, then generate keys for service-principal `packer`
 # -> UI Only, seems not implemented in hcp-cli
