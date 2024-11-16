@@ -62,3 +62,9 @@ Just run:
 ```shell
 % packer build .
 ```
+
+You can see your machine-images in your Google Cloud projects.
+
+```shell
+% gcloud compute images list --no-standard-images
+````
