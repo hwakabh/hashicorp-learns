@@ -1,6 +1,5 @@
 source "googlecompute" "gce" {
   image_name          = "hwakabh-packer-image"
-  source_image        = var.gcp_source_image
   source_image_family = var.gcp_source_image_family
   zone                = var.gcp_zone
   project_id          = var.gcp_project_id

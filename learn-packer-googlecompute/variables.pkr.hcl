@@ -9,12 +9,6 @@ variable "gcp_project_id" {
   description = "Project ID of Google Cloud used by Packer"
 }
 
-variable "gcp_source_image" {
-  type        = string
-  description = "Base image listed: gcloud compute image list"
-  default     = "debian-12-bookworm-v20241009"
-}
-
 variable "gcp_source_image_family" {
   type        = string
   description = "Iamge family source_image belongs"

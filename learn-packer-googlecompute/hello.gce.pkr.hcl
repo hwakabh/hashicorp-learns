@@ -14,8 +14,7 @@ build {
   ]
 
   hcp_packer_registry {
-    // If bucket_name does not exist in HCP Packer Registry, newly created
-    bucket_name = "nightly-packer"
+    bucket_name = "gce-packer"
     description = "First bucket for Packer artifacts"
 
     bucket_labels = {
@@ -30,10 +29,10 @@ build {
   }
 
   provisioner "shell" {
-    inline = ["echo \"hello world\""]
+    inline = ["echo \"hello world\" >> hello.md"]
   }
   provisioner "shell" {
-    inline = ["echo \"hello another world\""]
+    inline = ["echo \"hello another world\" >> hello.md"]
   }
 
 }
