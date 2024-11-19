@@ -3,8 +3,9 @@
 *.key.json
 *.pem
 
-# Local .terraform directories
+# Local directories
 **/.terraform/*
+**/.vagrant/*
 
 # .tfstate files
 *.tfstate
@@ -44,5 +45,5 @@ override.tf.json
 .terraformrc
 terraform.rc
 
-# Vagrant local directories
-.vagrant
+# local artifacts
+*.box
