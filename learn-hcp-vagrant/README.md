@@ -29,6 +29,13 @@ basebox         (vmware_desktop, 0)
 ## multi-machine/multi-provider
 
 ```shell
+# Prerequired by Vagrant files
+# - for mysql container
+% export MYSQL_ROOT_PASSWORD="your_password_for_dev"
+# - for apline VM (confirm box had been created with above)
+% ls -al ./base.box
+
+# Bringing them up at the same time
 % vagrant up
 ```
 
