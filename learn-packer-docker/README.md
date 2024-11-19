@@ -20,8 +20,8 @@ For pushing metadata to HCP Packer Registry, we need to do several operations as
 --member=$(hcp iam service-principals read packer --format=json |jq -r .id) \
 --role=roles/contributor
 
-# Navigate to HCP Packer via Browser, then generate keys for service-principal `packer`
-# -> UI Only, seems not implemented in hcp-cli
+# Generate keys for service-principal
+% hcp iam service-principals keys create packer
 
 # Set Client ID/Secret for accessing HCP Packer Registry
 % export HCP_CLIENT_ID=${your_hcp_client_id}
