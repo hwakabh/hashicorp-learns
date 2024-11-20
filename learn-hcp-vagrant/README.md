@@ -14,16 +14,16 @@ Here is the example of VMware Fusion with Alpine Linux:
 Compose with Box format. \
 Please refer more details for [official documents](https://developer.hashicorp.com/vagrant/docs/boxes/format).
 ```shell
-% tar czvf base.box ./metadata.json -C ./src/ .
+% tar czvf alpine.base.box ./metadata.json -C ./src/ .
 ```
 
 Then you can try scratched box into your Vagrant.
 ```shell
-% vagrant box add --name basebox ./base.box
+% vagrant box add --name base-apline ./alpine.base.box
 
 # Validate
 % vagrant box list
-basebox         (vmware_desktop, 0)
+base-alpine         (vmware_desktop, 0)
 ```
 
 ## multi-machine/multi-provider
@@ -33,7 +33,7 @@ basebox         (vmware_desktop, 0)
 # - for mysql container
 % export MYSQL_ROOT_PASSWORD="your_password_for_dev"
 # - for apline VM (confirm box had been created with above)
-% ls -al ./base.box
+% ls -al ./alpine.base.box
 
 # Bringing them up at the same time
 % vagrant up

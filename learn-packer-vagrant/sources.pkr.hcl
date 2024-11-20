@@ -5,16 +5,22 @@ source "vagrant" "cloudbox" {
   provider     = "vmware_desktop"
   communicator = "ssh"
   output_dir   = "pkr-debian-11"
+  skip_package = false // default
   skip_add     = true
-  skip_package = false    // default
 }
 
-# // fetch box locally and build another
-# source "vagrant" "localbox" {
-#   source_path  = "./"
-#   communicator = "ssh"
-#   output_dir   = "./alpine-3.23"
-#   provider     = "vmware_desktop"
-#   skip_add     = true
-#   skip_package = false    // default
-# }
+// fetch box locally and build another
+source "vagrant" "localbox" {
+  source_path  = "./alpine.base.box"
+  provider     = "vmware_desktop"
+  communicator = "ssh"
+  output_dir   = "./pkr-alpine-3.23"
+  skip_package = false // default: false
+  skip_add     = true // default: false
+  # box_name     = "alpine-base"
+}
+
+source "docker" "nginx" {
+  image = "bitnami/nginx"
+  commit = true
+}

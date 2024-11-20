@@ -20,7 +20,7 @@ Vagrant.configure("2") do |config|
   # vmware_desktop provider
   config.vm.define "alpine" do |machine|
     # Fetch box file from local
-    machine.vm.box_url = "file://base.box"
+    machine.vm.box = "file://alpine.base.box"
     machine.vm.provider "vmware_desktop" do |fusion|
       fusion.gui = true
       fusion.allowlist_verified = true
