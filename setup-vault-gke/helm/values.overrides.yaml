@@ -6,6 +6,7 @@ global:
   namespace: "vault"
 
 server:
+  # https://developer.hashicorp.com/vault/docs/platform/k8s/helm/enterprise
   enterpriseLicense:
     secretName: "vault-ent-license"
   image:
