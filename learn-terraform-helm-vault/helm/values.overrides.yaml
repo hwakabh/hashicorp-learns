@@ -14,14 +14,15 @@ server:
     tag: "1.17.7-ent"
   logLevel: "debug"
   ingress:
-    enabled: true
-    # https://cloud.google.com/kubernetes-engine/docs/concepts/ingress#deprecated_annotation
-    #ingressClassName: ""
-    annotations:
-      kubernetes.io/ingress.class: gce
-      # kubernetes.io/tls-acme: "true"
-    hosts:
-      - host: vault.hc-8b1ddb1733494af2af02d477176.gcp.sbx.hashicorpdemo.com
+    enabled: false
+    # enabled: true
+    # # https://cloud.google.com/kubernetes-engine/docs/concepts/ingress#deprecated_annotation
+    # #ingressClassName: ""
+    # annotations:
+    #   kubernetes.io/ingress.class: gce
+    #   # kubernetes.io/tls-acme: "true"
+    # hosts:
+    #   - host: vault.hc-8b1ddb1733494af2af02d477176.gcp.sbx.hashicorpdemo.com
 
   extraArgs: "-config=/vault/userconfig/vault-kms-credentials/vault-unseal.key.json"
   # extraEnvironmentVars is a list of extra environment variables to set with the stateful set. These could be
@@ -54,6 +55,9 @@ server:
     raft:
       enabled: true
       setNodeId: true
+      // multi-seal setup + Cloud Keys
+      // https://developer.hashicorp.com/vault/docs/configuration/seal/seal-ha
+      // https://developer.hashicorp.com/vault/docs/configuration/seal/gcpckms
       config: |-
         ui = true
         cluster_name = "vault-cluster"
@@ -63,12 +67,24 @@ server:
           cluster_address = "[::]:8201"
         }
         seal "gcpckms" {
+            # priority    = "1"
+            # name        = "gcpckms-primary"
             credentials = "/vault/userconfig/vault-kms-credentials/vault-unseal.key.json"
-            project     = "hc-8732d2178369440c886cb59aee6"
+            project     = "hc-73563a2f5f734d58b01b501d5aa"
             region      = "global"
             key_ring    = "vault-ent-cloudkeys"
             crypto_key  = "vault-crypto-key"
         }
+        # enable_multiseal = true
+        # seal "gcpckms" {
+        #     priority    = "2"
+        #     name        = "gcpckms-secondary"
+        #     credentials = "/vault/userconfig/vault-kms-credentials/vault-unseal.key.json"
+        #     project     = "hc-73563a2f5f734d58b01b501d5aa"
+        #     region      = "global"
+        #     key_ring    = "vault-ent-subkey"
+        #     crypto_key  = "vault-sub-key"
+        # }
         storage "raft" {
           path = "/vault/data"
           retry_join {

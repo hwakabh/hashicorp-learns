@@ -16,7 +16,7 @@ https://developer.hashicorp.com/vault/docs/platform/k8s/helm/enterprise
 ```shell
 % kubectl create ns vault
 
-% LICENSE_STRING=$(cat ./docker-compose/vault.hclic)
+% LICENSE_STRING=$(cat ./vault-enterprise.hclic)
 % kubectl -n vault create secret generic vault-ent-license --from-literal="license=${LICENSE_STRING}"
 ```
 
@@ -105,5 +105,5 @@ Check downloaded credential files and create kubernetes secrets from it. \
 Be sure that we need to expose this credential files as public.
 
 ```shell
-% kubectl -n vault create secret generic vault-kms-credentials --from-file=vault-kms.key.json
+% kubectl -n vault create secret generic vault-kms-credentials --from-file=vault-unseal.key.json
 ```

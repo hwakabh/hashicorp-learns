@@ -13,8 +13,8 @@ services:
     volumes:
       - ./vault.hcl:/vault/config/vault.hcl
       # gitignored
-      - ../vault-kms.key.json:/vault/config/vault-unseal.key.json
-      - ./vault.hclic:/vault/config/vault.hclic
+      - ../vault-unseal.key.json:/vault/config/vault-unseal.key.json
+      - ../vault-enterprise.hclic:/vault/config/vault.hclic
     cap_add:
       - IPC_LOCK
     # Starting up Vault with non-dev mode
