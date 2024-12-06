@@ -1,37 +1,31 @@
-// validation with length
-variable "user_id" {
-  type        = string // length will not work with type=number
-  description = "6-digit User ID"
-  validation {
-    condition     = length(var.user_id) == 6
-    error_message = <<-EOF
-      "Use ID should be exactly 6 digits."
-    EOF
-  }
-}
-
 // validation with fixed elements
 locals {
-  company = ["google", "apple", "facebook", "amazon"]
+  env_name = ["dev", "bcp"]
 }
-variable "user_company" {
-  type        = string
-  description = "Company of user"
-  # sensitive = true
+variable "doormat_env" {
+  type = string
+  // length with validation will not work with type=number
+  description = "Environments where the resource will be created"
   validation {
-    condition     = contains(local.company, var.user_company)
-    error_message = "Company should be GAFA with lower case"
+    condition     = contains(local.env_name, var.doormat_env)
+    error_message = "doormat_env should be ended with `-dev` or `-bcp`."
+  }
+  validation {
+    condition     = length(var.doormat_env) == 3
+    error_message = <<-EOF
+      "env_name should be 3-characters."
+    EOF
   }
 }
 
 // envar validation with string pattern
 // can be referred with `TF_VAR_GREET` in shell
-variable "GREET" {
+variable "project_id" {
   type        = string
-  description = "Say Greeting message"
-
+  description = "ID of Google Cloud's project, where Terraform will create resources."
+  # sensitive = true
   validation {
-    condition     = can(regex("^hel", var.GREET))
-    error_message = "Lets say hello though"
+    condition     = can(regex("^hc-", var.project_id))
+    error_message = "Invalid projects, validate ID with `gcloud config get project`"
   }
 }

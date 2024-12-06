@@ -1,7 +1,14 @@
 // using 'hashicorp/local' provider
 resource "local_file" "readme" {
   filename = "${path.root}/${var.project_name}/README.md"
-  content  = "# ${var.project_name}"
+  content  = <<-EOF
+      # ${var.project_name}
+      ## Project Storage Information
+      Type: Google Cloud Storage (GCS)
+      Bucket URL:
+      - ${var.project_storages[0]}
+      - ${var.project_storages[1]}
+  EOF
 }
 
 resource "local_file" "providers" {
@@ -10,8 +17,8 @@ resource "local_file" "providers" {
     terraform {
       required_providers {
         local = {
-          source = "hashicorp/local"
-          version = "2.5.2"
+          source = "hashicorp/google"
+          version = "6.12.0"
         }
       }
     }

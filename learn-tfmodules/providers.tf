@@ -14,5 +14,6 @@ terraform {
 }
 
 provider "google" {
-  region = "asia-northeast1"
+  region      = "asia-northeast1"
+  credentials = pathexpand("~/.config/gcloud/application_default_credentials.json")
 }
