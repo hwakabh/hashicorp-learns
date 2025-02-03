@@ -23,3 +23,9 @@ Also learnings for TFC provider
 - create workspace
 - set environmental/terraform variables in TFC workspace
 - create team
+
+```shell
+# Passing sensitive values via environmental variables with TF_VAR_*
+# case if you use User Token, the user should have permission to manage Org
+export TF_TOKEN_app_terraform_io='$your_org_token_or_user_token'
+```
