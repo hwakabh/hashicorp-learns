@@ -1,0 +1,16 @@
+param weather
+param day
+
+// rule definitions
+is_sunny = rule {
+  weather == "sunny"
+}
+
+is_wednesday = rule {
+  day == "wednesday"
+}
+
+// invoke as main
+main = rule {
+  is_sunny and is_wednesday
+}
