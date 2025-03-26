@@ -1,3 +1,5 @@
+.DS_store
+
 # License / service-account Credentials
 *.hclic
 *.key.json
