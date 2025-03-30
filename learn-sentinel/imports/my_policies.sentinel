@@ -1,0 +1,6 @@
+import "runtime"
+
+get_sentinel_version = func() {
+  print("Fetching sentinel versions ...")
+  return runtime.version
+}

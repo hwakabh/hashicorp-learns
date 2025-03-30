@@ -1,0 +1,8 @@
+{
+  "hosts": [
+    { "name": "postman-echo.com", "role": "dev" },
+    { "name": "ifconfig.io", "role": "dev"},
+    { "name": "httpbin.org", "role": "dev" },
+    { "name": "cip.cc", "role": "test"}
+  ]
+}
