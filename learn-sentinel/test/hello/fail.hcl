@@ -1,7 +1,17 @@
-param "weather" {
-  value = "rainy"
+mock "time" {
+  data = {
+    now = {
+      day = 31,
+      hour = 7,
+      minute = 30,
+      month = 5,
+      month_name = "May",
+    }
+  }
 }
 
-param "day" {
-  value = "sunday"
+test {
+  rules = {
+    main = false
+  }
 }

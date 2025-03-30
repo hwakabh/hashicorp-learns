@@ -1,39 +1,9 @@
-# hello world with Sentinel Policies
+// hello world with Sentinel
+import "time"
 
-// Note that imports should be on the top of .sentinel files
-// Static imports
-import "userdata_imports"
-// Standard imports
-import "http"
-import "json"
-// Using libraries imports
-// https://developer.hashicorp.com/terraform/cloud-docs/policy-enforcement/import-reference
-# import "tfplan/v2" as tfplan
-
-
-// accessing Static imported data
-users = userdata_imports.users
-for users as user {
-  print("Username: " + user.name + " , Role: " + user.role)
-}
-
-// accessing Standard imported data
-// https://developer.hashicorp.com/sentinel/docs/imports/http
-// https://developer.hashicorp.com/sentinel/docs/imports/json
-resp = http.get("https://httpbin.org/get")
-r = json.unmarshal(resp.body)
-print(r.origin)
-
-
-// rule definitions and variables
-str = "abc"
-print("The value of `str` is [ " + str + " ]")
-
-another_rule = rule {
-  str == "abc"    // return true
-}
+print(time.now)
 
 // invoke as main
 main = rule {
-  another_rule == true
+	time.now.month_name == "March"
 }
