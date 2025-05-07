@@ -44,3 +44,31 @@ base-alpine         (vmware_desktop, 0)
 - Create service-principals for Vagrant
 - Bind roles for service-principal
 - Authenticate and publish
+
+```shell
+# Add client_id/secret of service-principals for Vagrant
+% export HCP_CLIENT_ID="***"
+% export HCP_CLIENT_SECRET="***"
+
+# Login to HCP Vagrant Registry
+% vagrant cloud auth login
+% vagrant cloud auth whoami
+Currently logged in as service vagrant
+
+# Confirm that registry has been created before pushing box
+% export REGISTRY_NAME="hwakabh"
+
+% vagrant cloud publish $REGISTRY_NAME/alpine 0.1.0 vmware_desktop ./alpine.base.box --force
+You are about to publish a box on Vagrant Cloud with the following options:
+hwakabh/alpine:   (v0.1.0) for provider 'vmware_desktop'
+Box Architecture:      arm64
+Saving box information...
+Uploading provider with file /Users/hwakabh/git/hashicorp-learns/learn-hcp-vagrant/alpine.base.box
+Complete! Published hwakabh/alpine
+Box:                  hwakabh/alpine
+Private:              no
+Version:              0.1.0
+Provider:             vmware_desktop
+Architecture:         arm64
+Default Architecture: yes
+```
