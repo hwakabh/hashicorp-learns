@@ -1,9 +1,0 @@
-// hello world with Sentinel
-import "time"
-
-print(time.now)
-
-// invoke as main
-main = rule {
-	time.now.month_name == "March"
-}

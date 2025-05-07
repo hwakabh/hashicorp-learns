@@ -1,0 +1,6 @@
+import "time"
+
+main = rule {
+  # ポリシーが評価される実行環境での現在時刻を取得し、水曜日であることをチェックする
+  time.now.weekday_name == "Tuesday"
+}
