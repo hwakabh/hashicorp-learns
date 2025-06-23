@@ -11,14 +11,14 @@ terraform {
 provider "docker" {}
 
 // Pull docker image
-resource "docker_image" "img" {
+resource "docker_image" "nginx" {
   name         = "nginx:1.27-alpine-slim"
   keep_locally = false
 }
 
 // Run container
 resource "docker_container" "nginx-alice" {
-  image = docker_image.img.image_id
+  image = docker_image.nginx.image_id
   name  = "nginx-01"
 
   ports {
@@ -28,7 +28,7 @@ resource "docker_container" "nginx-alice" {
 }
 
 resource "docker_container" "nginx-bob" {
-  image = docker_image.img.image_id
+  image = docker_image.nginx.image_id
   name  = "nginx-02"
 
   ports {
