@@ -13,7 +13,7 @@ variable "doormat_env" {
   validation {
     condition     = length(var.doormat_env) == 3
     error_message = <<-EOF
-      "env_name should be 3-characters."
+      "doormat_name should be 3-characters."
     EOF
   }
 }
