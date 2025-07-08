@@ -1,3 +1,5 @@
+resource "null_resource" "this" {}
+
 // Invoking public modules named with `my_buckets`
 module "my_buckets" {
   // https://registry.terraform.io/modules/terraform-google-modules/cloud-storage/google/latest
