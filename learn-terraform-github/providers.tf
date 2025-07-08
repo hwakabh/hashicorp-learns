@@ -1,4 +1,10 @@
 terraform {
+  cloud {
+    organization = "hwakabh-dev"
+    workspaces {
+      name = "learn-terraform-github"
+    }
+  }
   required_providers {
     // https://registry.terraform.io/providers/integrations/github/latest/docs
     github = {
